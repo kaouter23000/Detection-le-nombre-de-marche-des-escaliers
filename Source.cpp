@@ -1,9 +1,8 @@
 /*
-* Auteurs:
-    - Marco Castro
+* Auteur:
     - Berrahal Kaouter
 * Date: 2020-04-21
-* Information: Analyse d’un escalier : comptage et détection des marches
+* Information: Analyse dâ€™un escalier : comptage et dÃ©tection des marches
 */
 
 #include "opencv2/imgproc/imgproc.hpp"
@@ -20,7 +19,7 @@ struct myclass {
     }
 } myobject;
 
-//Unification de points très proches dans les coordonnées X et Y
+//Unification de points trÃ¨s proches dans les coordonnÃ©es X et Y
 std::vector<Point> unification(std::vector<Point> p, int x, int y) {
     for (int i = 0; i < p.size(); i++)
         for (int j = i; j < p.size(); j++)
@@ -96,22 +95,22 @@ int main() {
     Mat points = cv::Mat::zeros(color_dst.rows, color_dst.cols, CV_8UC1);
     for (size_t i = 0; i < linesP.size(); i++) {
         Vec4i l = linesP[i];
-        //On trace tous les segments parallèles inférieurs à 40 degrése           
+        //On trace tous les segments parallÃ¨les infÃ©rieurs Ã  40 degrÃ©se           
         if (abs(atan2(l[3] - l[1], l[2] - l[0])) < 0.15) {
             line(points, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(255, 0, 0), 1, 8, 0);
-            //Le vecteur de points p1 stocke les points des lignes parallèles
+            //Le vecteur de points p1 stocke les points des lignes parallÃ¨les
             p1.push_back(Point(l[0], l[1]));
         }
     }
 
-    //Les points du vecteur p1 sont classés par ordre croissant
+    //Les points du vecteur p1 sont classÃ©s par ordre croissant
     std::sort(p1.begin(), p1.end(), myobject);
 
-    //On utilise la fonction d'unification 3 fois. L'objectif est de trouver le point le plus extrême, 
-    //c'est-à-dire le plus proche de la coordonnée X et le plus éloigné de la coordonnée Y
+    //On utilise la fonction d'unification 3 fois. L'objectif est de trouver le point le plus extrÃªme, 
+    //c'est-Ã -dire le plus proche de la coordonnÃ©e X et le plus Ã©loignÃ© de la coordonnÃ©e Y
 
-    //Les nouveaux points représentent le nombre de coin des marches. 
-    //Le vecteur de Point p2 stock ces coordonnées
+    //Les nouveaux points reprÃ©sentent le nombre de coin des marches. 
+    //Le vecteur de Point p2 stock ces coordonnÃ©es
 
     std::vector<Point> p2;
     p2 = unification(p1, 13, 13);
@@ -124,8 +123,8 @@ int main() {
 
     imshow("Marches", points);
 
-    //2ème unification de points. L'objectif est de nettoyer les lignes parallèles de chaque étape
-    //Le vecteur de Point p3 stock ces coordonnées
+    //2Ã¨me unification de points. L'objectif est de nettoyer les lignes parallÃ¨les de chaque Ã©tape
+    //Le vecteur de Point p3 stock ces coordonnÃ©es
 
     std::vector<Point> p3;    Mat points2 = cv::Mat::zeros(color_dst.rows, color_dst.cols, CV_8UC1);
     p3 = unification(unification(unification(p1, 0, 10), 0, 10), 0, 11);
@@ -135,7 +134,7 @@ int main() {
 
     //std::cout << "Points apres unification " << "\n";
     //On calcule la direction de l'escalier
-    //La méthode consiste à calculer des points entre les marches de l'axe Y.
+    //La mÃ©thode consiste Ã  calculer des points entre les marches de l'axe Y.
     //S'il y a un ou plusieurs points entre 2 marches (du vecteur p2), c'est un escalier vers le haut. 
     //S'il n'y a aucun point, c'est un escalier vers le bas.
     
